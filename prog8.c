@@ -12,11 +12,12 @@ void send_int_arr(int src, int dest, int size, int *arr, MPI_Status status, int 
 		MPI_Send(arr, size, MPI_INT, dest, 0, MPI_COMM_WORLD);
 	end = MPI_Wtime();
 
-	T = (end - start) / n_times * 1000000;  // in us
-	R = 2 * L / T / 1024 / 1024;  // in MB/s
+	T = (end - start) / n_times;  // in s
+	R = 2 * L / T / 1024 / 1024 / 1024;  // in GB/s
+	T *= 1000000; // in us
 	s = T / 2; // in us
 
-	printf("Process with rank %d: message_size = %7d, avg send time = %4.0f [us], bandwidth = %.3f [MB/s], latency = %4.0f [us]\n", src, size, T, R, s);
+	printf("Process with rank %d: message_size = %7d, avg send time = %4.0f [us], bandwidth = %6.3f [GB/s], latency = %4.0f [us]\n", src, size, T, R, s);
 }
 
 void recv_int_arr(int src, int dest, int size, int *arr, MPI_Status status, int n_times)
@@ -29,11 +30,12 @@ void recv_int_arr(int src, int dest, int size, int *arr, MPI_Status status, int 
 		MPI_Recv(arr, size, MPI_INT, dest, 0, MPI_COMM_WORLD, &status);
 	end = MPI_Wtime();
 
-	T = (end - start) / n_times * 1000000; // in us
-	R = 2 * L / T / 1024 / 1024; // in MB/s
+	T = (end - start) / n_times;  // in s
+	R = 2 * L / T / 1024 / 1024 / 1024;  // in GB/s
+	T *= 1000000; // in us
 	s = T / 2; // in us
 
-	printf("Process with rank %d: message_size = %7d, avg recv time = %4.0f [us], bandwidth = %.3f [MB/s], latency = %4.0f [us]\n", src, size, T, R, s);
+	printf("Process with rank %d: message_size = %7d, avg recv time = %4.0f [us], bandwidth = %6.3f [GB/s], latency = %4.0f [us]\n", src, size, T, R, s);
 }
 
 int main(int argc, char **argv)
